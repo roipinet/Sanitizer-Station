@@ -1,21 +1,22 @@
 int greenLED = 3;
 int redLED = 4;
-int pir1 = 8;
-int pir2 = 10;
 int initTime = 60;
 int sanitTime = 6;
 int exitTime = 2;
 int relayPin = 12;
 int counter = 0;
 int pirState = LOW;
+int ultraTrigger = 6;
+int ultraEcho = 7;
 void setup()
 {
   //Pin mode for LEDS
   pinMode(greenLED, OUTPUT);
   pinMode(redLED, OUTPUT);
-  //Pin mode for PIRs
-  pinMode(pir1, INPUT);
-  pinMode(pir2, INPUT);
+  //Pin mode for ultrasonic
+  pinMode(ultraTrigger, OUTPUT);
+  pinMode(ultraEcho, INPUT);
+  digitalWrite(ultraTrigger, LOW);
   //Pin mode for relay
   pinMode(relayPin, OUTPUT);
   Serial.begin(9600);
@@ -23,14 +24,24 @@ void setup()
 
 void loop()
 {
-  pirInitialization();
+  //pirInitialization();
   //Turn on green LED to signal ready
   while(1){
   digitalWrite(greenLED, HIGH);
   digitalWrite(redLED, LOW);
-   //Wait for sensor reading. 
-
-    if(digitalRead(pir1) == HIGH || digitalRead(pir2) == HIGH){
+   //Start sensing
+   digitalWrite(ultraTrigger, HIGH);
+   delayMicroseconds(10);
+   digitalWrite(ultraTrigger, LOW);
+   int travelTime = pulseIn(ultraEcho, HIGH);
+   //Calculate distance
+   int distance = travelTime/59;
+   //Report back distance
+   //Serial.print("Distance: ");
+   //Serial.print(distance);
+   //Serial.println(" cm");
+   delay(100);
+    if(distance < 30){
       if(pirState == LOW){
         Serial.print("Motion detected. Count:  ");
         Serial.println(counter);

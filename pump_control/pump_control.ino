@@ -1,13 +1,13 @@
-int greenLED = 3;
-int redLED = 4;
+int greenLED = 2;
+int redLED = 3;
 int initTime = 60;
 int sanitTime = 6;
 int exitTime = 2;
-int relayPin = 12;
+int relayPin = 4;
 int counter = 0;
-int pirState = LOW;
-int ultraTrigger = 6;
-int ultraEcho = 7;
+int ultraTrigger = 7;
+int ultraEcho = 6;
+int height = 120;
 void setup()
 {
   //Pin mode for LEDS
@@ -37,22 +37,17 @@ void loop()
    //Calculate distance
    int distance = travelTime/59;
    //Report back distance
-   //Serial.print("Distance: ");
-   //Serial.print(distance);
-   //Serial.println(" cm");
+   Serial.print("Distance: ");
+   Serial.print(distance);
+   Serial.println(" cm");
    delay(100);
-    if(distance < 30){
-      if(pirState == LOW){
+    if(distance < height){
         Serial.print("Motion detected. Count:  ");
         Serial.println(counter);
         counter++;
         startSanitization();
-        pirState = HIGH;
       }
-      else{
-        pirState = LOW;
-      }
-  }}
+  }
     
 }
 
